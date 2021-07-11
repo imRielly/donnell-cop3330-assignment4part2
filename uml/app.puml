@@ -1,0 +1,93 @@
+'/*
+' *  UCF COP3330 Summer 2021 Assignment 4 Solution
+' *  Copyright 2021 Rielly Donnell
+' */
+
+
+@startuml
+'https://plantuml.com/class-diagram
+
+class app {
+    main()
+    start()
+}
+
+class AppController {
+    model: AppModel
+
+    ToDoList: ObservableList
+
+    tableView: TableView
+    colDescription: TableColumn
+    colDueDate: TableColumn
+    colCompleted: TableColumn
+
+    lvTitles: ListView
+
+    txtNewDescription: TextField
+    dtNewDueDate: DatePicker
+    chkbx: CheckBox
+
+    activeToDoList: ToDoList
+    activeToDoItem: ToDoItem
+
+    refreshTitleList()
+    refreshToDoItems()
+    btnSaveClicked()
+    btnLoadClicked()
+    btnDeleteListClicked()
+    btnDeleteToDoItemClicked()
+    btnMarkCompleteClicked()
+    btnNewItemClicked()
+    listTitleClicked()
+    btnCreateNewListClicked()
+    btnSaveListClicked()
+    initialize()
+}
+
+class AppModel {
+    ToDoList: Collection
+
+    getToDoList()
+    loadAll()
+    loadList()
+    saveAll()
+    saveList()
+    addList()
+    removeList()
+    removeToDoItem()
+    markItemCompleted()
+}
+
+class ToDoList {
+    title: String
+    toDoItems: Collection
+
+    setTitle()
+    setToDoItems()
+
+    getTitle()
+    getToDoItems()
+
+    addItem()
+    removeItem()
+}
+
+class ToDoItem {
+    desc: String
+    dueDate: String
+    complete: boolean
+    getDesc()
+    setDesc()
+    getDueDate()
+    setDueDate()
+    getComplete()
+    setComplete()
+}
+
+app -- AppController
+AppController -- AppModel
+AppModel -- ToDoList
+ToDoList -- ToDoItem
+
+@enduml
