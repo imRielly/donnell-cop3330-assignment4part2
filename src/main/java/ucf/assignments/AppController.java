@@ -5,13 +5,11 @@
 
 package ucf.assignments;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
 
+import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
@@ -21,19 +19,13 @@ import ucf.assignments.*;
 public class AppController {
 
     @FXML
-    ObservableList ToDoList = FXCollections.observableArrayList();
-
+    private TableView<ToDoItem> tableView;
     @FXML
-    private ListView<String> lvTitles;
-
+    private TableColumn<ToDoItem, String> colDescription;
     @FXML
-    private TableView<ToDoList> tableView;
+    private TableColumn<ToDoItem, LocalDate> colDueDate;
     @FXML
-    private TableColumn<ToDoList, String> colDescription;
-    @FXML
-    private TableColumn<ToDoList, LocalDate> colDueDate;
-    @FXML
-    private TableColumn<ToDoList, Boolean> colCompleted;
+    private TableColumn<ToDoItem, Boolean> colCompleted;
 
     @FXML
     private TextField txtNewDescription;
@@ -43,70 +35,98 @@ public class AppController {
     private CheckBox chkbxNewCompleted;
 
     @FXML
-    private ToDoList activeToDoList;
+    private CheckBox chkbxShowCompleted;
     @FXML
-    private ToDoItem activeToDoItem;
+    private CheckBox chkbxShowIncomplete;
 
     @FXML
-    public void refreshTitleList() {
-        //Remove all items from ToDoList
-        //For all ToDoLists in appModel toDoList
-        //  Add appModel toDoList title to ToDoList
-        //Add all ToDoList items to lvTitles
-    }
+    private boolean showCompleted = true;
+    @FXML
+    private boolean showIncomplete = true;
 
     @FXML
     public void refreshToDoItems() {
         //Clear tableView
-        //Add All items to tableView from activeToDoList.getToDoItems
+        //New ToDoList filteredItems
+        //if showCompleted && showIncomplete
+        //  filteredItems = toDoList
+        //else if showCompleted
+        //  filteredItems.setToDoItems = toDoList.getCompleted
+        //Add All items to tableView from filteredItems.getToDoItems
     }
 
     @FXML
-    public void btnSaveClicked(ActionEvent actionEvent) {
-        //appModel -> saveAll()
-    }
+    public void btnLoadClicked(ActionEvent actionEvent) throws IOException {
+        //Parent parentLoadList = FXML Loader getResource("LoadFile.fxml")
+        //Scene sceneLoadList = new Scene parentLoadList
+        //Stage window = (Stage)actionEvent (Node)get Source -> get Scene -> get Window
+        //window set scene sceneLoadList
+        //show window
 
-    @FXML
-    public void btnLoadClicked(ActionEvent actionEvent) {
-        //appModel -> loadAll()
-    }
-
-    @FXML
-    public void btnDeleteListClicked(ActionEvent actionEvent) {
-        //appModel -> removeList(activeToDoList.getTitle)
     }
 
     @FXML
     public void btnDeleteToDoItemClicked(ActionEvent actionEvent) {
-        //appModel -> removeToDoItem (activeToDoList.getTitle, activeToDoItem.getDesc)
-    }
-
-    @FXML
-    public void btnMarkCompleteClicked(ActionEvent actionEvent) {
-        //appModel -> markItemCompleted (activeToDoList.getTitle, activeToDoItem.getDesc)
+        //toDoList -> removeItem (toDoItem.getDesc)
     }
 
     @FXML
     public void btnNewItemClicked(ActionEvent actionEvent) {
-        //appModel -> toDoList -> title contains activeToDoList title -> addItem(txtDescription, dtDueDate, chkboxCompleted)
+        //toDoList -> addItem(txtDescription, dtDueDate, chkboxCompleted)
         //Refresh to do items
     }
 
     @FXML
-    public void listTitleClicked(MouseEvent mouseEvent) {
-        //String clickedTitle = lvTitles selection
-        //Set activeToDoList = appModel -> toDoList -> title contains clickedTitle
-        //Refresh table view
-    }
-
-    @FXML
     public void btnCreateNewListClicked(ActionEvent actionEvent) {
-        //appModel -> addList
+        //Parent parentLoadList = FXML Loader getResource("NewFile.fxml")
+        //Scene sceneLoadList = new Scene parentLoadList
+        //Stage window = (Stage)actionEvent (Node)get Source -> get Scene -> get Window
+        //window set scene sceneLoadList
+        //show window
     }
 
     @FXML
     public void btnSaveListClicked(ActionEvent actionEvent) {
-        //appModel -> saveList(activeToDoList.getTitle)
+        //appModel -> saveList()
+    }
+
+    @FXML
+    public void chkbxShowCompletedClicked(ActionEvent actionEvent) {
+        //set showCompleted to chkbxShowCompleted.isSelected()
+        //refreshToDoItems
+
+    }
+
+    public void chkbxShowIncompleteClicked(ActionEvent actionEvent) {
+        //set showIncomplete to chkbxShowIncomplete.isSelected()
+        //refreshToDoItems
+    }
+
+    public void colDescriptionUpdate(TableColumn.CellEditEvent<ToDoList, String> toDoListStringCellEditEvent) {
+        //String edit = toDoListStringCellEditEvent.getNewValue();
+        //ToDoItem selectedItem = tableView.getSelectionModel().getSelectedItem()
+        //For each ToDoItem in toDoList
+        // if ToDoItem itemCompare with selectedItem is true
+        //      ToDoItem setDescription edit
+
+    }
+
+    public void colDueDateUpdate(TableColumn.CellEditEvent<ToDoList, LocalDate> toDoListLocalDateCellEditEvent) {
+        //LocalDate edit = toDoListLocalDateCellEditEvent.getNewValue();
+        //ToDoItem selectedItem = tableView.getSelectionModel().getSelectedItem()
+        //For each ToDoItem in toDoList
+        // if ToDoItem itemCompare with selectedItem is true
+        //      ToDoItem setDueDate edit
+
+    }
+
+    public void colCompletedUpdate(TableColumn.CellEditEvent<ToDoList, Boolean> toDoListBooleanCellEditEvent) {
+        //Boolean edit = toDoListBooleanCellEditEvent.getNewValue();
+        //ToDoItem selectedItem = tableView.getSelectionModel().getSelectedItem()
+        //For each ToDoItem in toDoList
+        // if ToDoItem itemCompare with selectedItem is true
+        //      ToDoItem setComplete edit
+
     }
 
 

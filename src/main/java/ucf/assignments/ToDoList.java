@@ -6,6 +6,7 @@
 package ucf.assignments;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collection;
 
 public class ToDoList {
@@ -22,6 +23,22 @@ public class ToDoList {
 
     public Collection<ToDoItem> getToDoItems() {
         return toDoItems;
+    }
+
+    public Collection<ToDoItem> getCompletedToDoItems() {
+        Collection<ToDoItem> completedItems = new ArrayList<ToDoItem>();
+        //for each ToDoItem in toDoList
+        //  if toDoList.getCompleted is true
+        //      add ToDoItem to completedItems
+        return completedItems;
+    }
+
+    public Collection<ToDoItem> getIncompleteToDoItems() {
+        Collection<ToDoItem> incompleteItems = new ArrayList<ToDoItem>();
+        //for each ToDoItem in toDoList
+        //  if toDoList.getCompleted is false
+        //      add ToDoItem to completedItems
+        return incompleteItems;
     }
 
     public void setToDoItems(Collection<ToDoItem> toDoItems) {

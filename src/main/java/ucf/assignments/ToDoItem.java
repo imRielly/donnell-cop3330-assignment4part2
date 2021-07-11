@@ -36,4 +36,10 @@ public class ToDoItem {
     public void setComplete(boolean complete) {
         this.complete = complete;
     }
+
+    public boolean itemCompare(ToDoItem toCompare) {
+        if (this.desc == toCompare.getDesc() && this.dueDate == toCompare.getDueDate() && Boolean.compare(this.complete, toCompare.getComplete()) == 0)
+            return true;
+        else return false;
+    }
 }

@@ -8,6 +8,9 @@
 'https://plantuml.com/class-diagram
 
 class app {
+    root: Parent;
+    scene: Scene;
+
     main()
     start()
 }
@@ -15,60 +18,53 @@ class app {
 class AppController {
     model: AppModel
 
-    ToDoList: ObservableList
-
     tableView: TableView
     colDescription: TableColumn
     colDueDate: TableColumn
     colCompleted: TableColumn
 
-    lvTitles: ListView
-
     txtNewDescription: TextField
     dtNewDueDate: DatePicker
-    chkbx: CheckBox
+    chkbxNewCompleted: CheckBox
 
-    activeToDoList: ToDoList
-    activeToDoItem: ToDoItem
+    showCompleted: Boolean
+    showIncomplete: Boolean
 
-    refreshTitleList()
     refreshToDoItems()
-    btnSaveClicked()
     btnLoadClicked()
-    btnDeleteListClicked()
     btnDeleteToDoItemClicked()
-    btnMarkCompleteClicked()
     btnNewItemClicked()
-    listTitleClicked()
     btnCreateNewListClicked()
     btnSaveListClicked()
+    chkbxShowCompletedClicked()
+    chkbxShowIncompleteClicked()
+    colDescriptionUpdate()
+    colDueDateUpdate()
+    colCompletedUpdate()
     initialize()
 }
 
 class AppModel {
-    ToDoList: Collection
+    toDoList: ToDoList
+    files: ArrayList<String>
 
     getToDoList()
-    loadAll()
+    setToDoList()
     loadList()
-    saveAll()
     saveList()
-    addList()
-    removeList()
-    removeToDoItem()
-    markItemCompleted()
+    loadFiles()
 }
 
 class ToDoList {
     title: String
     toDoItems: Collection
 
-    setTitle()
-    setToDoItems()
-
     getTitle()
+    setTitle()
     getToDoItems()
-
+    getCompletedToDoItems()
+    getIncompleteToDoItems()
+    setToDoItems()
     addItem()
     removeItem()
 }
@@ -83,10 +79,26 @@ class ToDoItem {
     setDueDate()
     getComplete()
     setComplete()
+    itemCompare()
+}
+
+class LoadFile {
+    lvFilesItems: ListView<String>
+
+    loadList()
+    initialize()
+}
+
+class NewFile {
+    btnCreateListClicked()
 }
 
 app -- AppController
 AppController -- AppModel
+AppController -- ToDoList
+AppController -- ToDoItem
+AppController -- LoadFile
+AppController -- NewFile
 AppModel -- ToDoList
 ToDoList -- ToDoItem
 
