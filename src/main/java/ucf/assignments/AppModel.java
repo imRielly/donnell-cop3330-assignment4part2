@@ -71,7 +71,6 @@ public void loadList(String fileName) {
 
     private void checkForFile(String fullPath, String fileName) {
         File file = new File(fullPath);
-        System.out.println(fullPath);
         if (!file.exists()) {
             ToDoList missingList = new ToDoList(fileName);
             ToDoItem missingItem = new ToDoItem("Sample Item");

@@ -33,7 +33,8 @@
                         <TableView fx:id="tableView" editable="true" prefHeight="286.0" prefWidth="614.0">
                           <columns>
                             <TableColumn fx:id="colDescription" onEditCommit="#colDescriptionUpdate" prefWidth="331.0" text="Description" />
-                            <TableColumn fx:id="colDueDate" minWidth="3.0" onEditCommit="#colDueDateUpdate" prefWidth="79.0" text="Due Date" />
+                            <TableColumn fx:id="colDueDate" minWidth="3.0" onEditCommit="#colDueDateUpdate" prefWidth="79.0" text="Due Date" visible="false" />
+                              <TableColumn fx:id="colDueDateFormatted" minWidth="3.0" onEditCommit="#colDueDateUpdate" prefWidth="79.0" text="Due Date" />
                               <TableColumn fx:id="colCompleted" onEditCommit="#colCompletedUpdate" prefWidth="75.0" text="Completed" />
                           </columns>
                         </TableView>

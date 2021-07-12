@@ -5,6 +5,9 @@
 
 package ucf.assignments;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.GregorianCalendar;
@@ -13,7 +16,8 @@ public class ToDoItem {
 
     String desc;
     GregorianCalendar dueDate;
-    boolean complete;
+    Boolean complete;
+    LocalDate dueDateFormat;
 
     public GregorianCalendar getGregNow() {
         return GregorianCalendar.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()));
@@ -23,13 +27,14 @@ public class ToDoItem {
         this.desc = desc;
         this.dueDate = dueDate;
         this.complete = complete;
+        this.dueDateFormat = dueDate.toZonedDateTime().toLocalDate();
     }
 
     public ToDoItem(String desc) {
         this.desc = desc;
         this.dueDate = getGregNow();
         this.complete = false;
-
+        this.dueDateFormat = dueDate.toZonedDateTime().toLocalDate();
     }
 
     public String getDesc() {

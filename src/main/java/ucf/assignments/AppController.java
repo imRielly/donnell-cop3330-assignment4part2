@@ -24,6 +24,7 @@ import java.util.GregorianCalendar;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
+import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
@@ -38,6 +39,8 @@ public class AppController implements Initializable {
     private TableColumn<ToDoItem, GregorianCalendar> colDueDate;
     @FXML
     private TableColumn<ToDoItem, Boolean> colCompleted;
+    @FXML
+    private TableColumn<ToDoItem, LocalDate> colDueDateFormatted;
 
     @FXML
     private TextField txtNewDescription;
@@ -208,7 +211,10 @@ public class AppController implements Initializable {
     }
 
     public GregorianCalendar convertLocalDateToGreg(LocalDate localDate) {
-        return GregorianCalendar.from(localDate.atStartOfDay(ZoneId.systemDefault()));
+        if (!(localDate == null)) {
+            return GregorianCalendar.from(localDate.atStartOfDay(ZoneId.systemDefault()));
+        }
+        return GregorianCalendar.from(LocalDate.of(1900, 01, 01).atStartOfDay(ZoneId.systemDefault()));
     }
 
     @Override
@@ -222,7 +228,9 @@ public class AppController implements Initializable {
         //Refresh to do items
         colDescription.setCellValueFactory(new PropertyValueFactory<ToDoItem, String>("desc"));
         colDueDate.setCellValueFactory(new PropertyValueFactory<ToDoItem, GregorianCalendar>("dueDate"));
+        colCompleted.setCellFactory(column -> new CheckBoxTableCell<>());
         colCompleted.setCellValueFactory(new PropertyValueFactory<ToDoItem, Boolean>("completed"));
+        colDueDateFormatted.setCellValueFactory(new PropertyValueFactory<ToDoItem, LocalDate>("dueDateFormat"));
         appModel.loadList("DefaultList");
         refreshToDoItems();
     }

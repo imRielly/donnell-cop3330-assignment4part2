@@ -65,7 +65,7 @@ public class LoadFile implements Initializable {
             for (File l :
                     lists) {
                 if (l.isFile()) {
-                    files.add(l.getName());
+                    files.add(l.getName().substring(0,l.getName().length()-4));
                 }
             }
         }
