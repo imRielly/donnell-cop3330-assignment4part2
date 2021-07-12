@@ -6,12 +6,31 @@
 package ucf.assignments;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.GregorianCalendar;
 
 public class ToDoItem {
 
     String desc;
-    LocalDate dueDate;
+    GregorianCalendar dueDate;
     boolean complete;
+
+    public GregorianCalendar getGregNow() {
+        return GregorianCalendar.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()));
+    }
+
+    public ToDoItem(String desc, GregorianCalendar dueDate, boolean complete) {
+        this.desc = desc;
+        this.dueDate = dueDate;
+        this.complete = complete;
+    }
+
+    public ToDoItem(String desc) {
+        this.desc = desc;
+        this.dueDate = getGregNow();
+        this.complete = false;
+
+    }
 
     public String getDesc() {
         return desc;
@@ -21,11 +40,11 @@ public class ToDoItem {
         this.desc = desc;
     }
 
-    public LocalDate getDueDate() {
+    public GregorianCalendar getDueDate() {
         return dueDate;
     }
 
-    public void setDueDate(LocalDate dueDate) {
+    public void setDueDate(GregorianCalendar dueDate) {
         this.dueDate = dueDate;
     }
 
@@ -38,8 +57,6 @@ public class ToDoItem {
     }
 
     public boolean itemCompare(ToDoItem toCompare) {
-        if (this.desc == toCompare.getDesc() && this.dueDate == toCompare.getDueDate() && Boolean.compare(this.complete, toCompare.getComplete()) == 0)
-            return true;
-        else return false;
+        return this.desc.equals(toCompare.getDesc()) && this.dueDate.equals(toCompare.getDueDate()) && Boolean.compare(this.complete, toCompare.getComplete()) == 0;
     }
 }
