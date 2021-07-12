@@ -22,6 +22,7 @@ class AppController {
     colDescription: TableColumn
     colDueDate: TableColumn
     colCompleted: TableColumn
+    colDueDateFormatted: TableColumn
 
     txtNewDescription: TextField
     dtNewDueDate: DatePicker
@@ -31,6 +32,7 @@ class AppController {
     showIncomplete: Boolean
 
     refreshToDoItems()
+    getItemsToDisplay()
     btnLoadClicked()
     btnDeleteToDoItemClicked()
     btnNewItemClicked()
@@ -41,16 +43,18 @@ class AppController {
     colDescriptionUpdate()
     colDueDateUpdate()
     colCompletedUpdate()
+    convertLocalDateToGreg()
     initialize()
 }
 
 class AppModel {
     toDoList: ToDoList
-    files: ArrayList<String>
 
     getToDoList()
     setToDoList()
     loadList()
+    checkForDir()
+    checkForFile()
     saveList()
     loadFiles()
 }
@@ -58,6 +62,12 @@ class AppModel {
 class ToDoList {
     title: String
     toDoItems: Collection
+
+    getGregNow()
+    getBlankList()
+
+    ToDoList()
+    ToDoList(String)
 
     getTitle()
     setTitle()
@@ -73,6 +83,11 @@ class ToDoItem {
     desc: String
     dueDate: String
     complete: boolean
+    dueDateFormat: LocalDate
+
+    ToDoItem(String, GregorianCalendar, boolean)
+    ToDoItem(String)
+
     getDesc()
     setDesc()
     getDueDate()
@@ -83,9 +98,12 @@ class ToDoItem {
 }
 
 class LoadFile {
+    files: ArrayList<String>
     lvFilesItems: ListView<String>
 
     loadList()
+    loadFiles()
+    getObservableFileList()
     initialize()
 }
 
