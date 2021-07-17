@@ -8,12 +8,13 @@ package ucf.assignments;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.LocalDate;
+import java.util.Scanner;
 
 public class AppModel {
-    private ToDoList toDoList = new ToDoList();
+    static ToDoList toDoList = new ToDoList();
 
     public ToDoList getToDoList() {
         return toDoList;
@@ -38,43 +39,40 @@ public void loadList(String fileName) {
 
     String path = System.getenv("APPDATA") + File.separator + "ToDoListApp" + File.separator;
     String fullPath = path + fileName + ".csv";
+
     checkForDir(path);
     checkForFile(fullPath, fileName);
+
     Scanner file = new Scanner(fullPath);
-    ToDoList loadedList = new ToDoList();
-    loadedList.setTitle(fileName);
-    while(file.hasNext()){
-        String data = file.next();
+
+    ToDoList loadedList = new ToDoList(fileName);
+
+    while(file.hasNextLine()) {
+        String data = file.nextLine();
         String[] lineValues = data.split(",");
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = null;
         if (lineValues.length >= 3) {
-            try {
-                date = dateFormat.parse(lineValues[1]);
-                GregorianCalendar gregDate = new GregorianCalendar();
-                gregDate = (GregorianCalendar) GregorianCalendar.getInstance();
-                gregDate.setTime(date);
-                loadedList.addItem(lineValues[0], gregDate, Boolean.parseBoolean(lineValues[2]));
-            } catch (ParseException e) {
-            }
+            String desc = lineValues[0].substring(1, lineValues[0].length() - 1);
+            LocalDate dueDate = LocalDate.parse(lineValues[0].substring(1, lineValues[1].length() - 1));
+            Boolean complete = Boolean.parseBoolean(lineValues[2].substring(1, lineValues[2].length() - 1));
+            loadedList.addItem(desc, dueDate, complete);
         }
     }
-    toDoList = loadedList;
+
+    toDoList.setTitle(loadedList.getTitle());
+    toDoList.setToDoItems(loadedList.getToDoItems());
 }
 
-    private void checkForDir(String path) {
+    public static void checkForDir(String path) {
         File dir = new File(path);
         if (!dir.exists()) {
             dir.mkdir();
         }
     }
 
-    private void checkForFile(String fullPath, String fileName) {
+    public static void checkForFile(String fullPath, String fileName) {
         File file = new File(fullPath);
         if (!file.exists()) {
             ToDoList missingList = new ToDoList(fileName);
-            ToDoItem missingItem = new ToDoItem("Sample Item");
-            missingList.addItem(missingItem.getDesc(), missingItem.getDueDate(), missingItem.getComplete());
             toDoList = missingList;
             try {
                 saveList();
@@ -84,7 +82,7 @@ public void loadList(String fileName) {
         }
     }
 
-    public void saveList() throws IOException {
+    public static void saveList() throws IOException {
     //String fileName = System.getenv("APPDATA") + File.separator + "ToDoListApp" + File.separator + toDoList.getTitle + ".csv"
     //New File listToSave
     //if listToSave file exists
@@ -95,20 +93,20 @@ public void loadList(String fileName) {
     //  Append to file getDesc, ",", getDueDate, ",", getCompleted, & "\n"
     String fileName = System.getenv("APPDATA") + File.separator + "ToDoListApp" + File.separator + toDoList.getTitle() + ".csv";
     File listToSave = new File(fileName);
-    if (listToSave.exists()) {
-        listToSave.delete();
-    }
+    Files.deleteIfExists(Path.of(listToSave.getPath()));
     listToSave.createNewFile();
     try {
         FileWriter fileWriter = new FileWriter(listToSave);
-        for (ToDoItem e :
-                toDoList.getToDoItems()) {
-            StringBuilder s = new StringBuilder(e.getDesc() + "," + String.valueOf(e.getDueDate()) + "," + String.valueOf(e.getComplete()) + "\n");
-            fileWriter.append(s);
+        if (!toDoList.toDoItems.isEmpty()){
+            for (ToDoItem e :
+                    toDoList.getToDoItems()) {
+                StringBuilder s = new StringBuilder("\"" + e.getDesc() + "\"" + "," + "\"" + String.valueOf(e.getDueDate()) + "\"" + "," + "\"" + String.valueOf(e.getComplete()) + "\"" + "\n");
+                fileWriter.write(String.valueOf(s));
+            }
         }
+        fileWriter.close();
     } catch (IOException e) {
     }
-
 }
 
 }

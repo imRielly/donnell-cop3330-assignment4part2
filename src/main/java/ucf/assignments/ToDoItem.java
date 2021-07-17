@@ -6,50 +6,39 @@
 package ucf.assignments;
 
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.GregorianCalendar;
 
 public class ToDoItem {
 
-    String desc;
-    GregorianCalendar dueDate;
+    SimpleStringProperty desc;
+    LocalDate dueDate;
     Boolean complete;
-    LocalDate dueDateFormat;
 
-    public GregorianCalendar getGregNow() {
-        return GregorianCalendar.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()));
-    }
-
-    public ToDoItem(String desc, GregorianCalendar dueDate, boolean complete) {
-        this.desc = desc;
+    public ToDoItem(String desc, LocalDate dueDate, boolean complete) {
+        this.desc = new SimpleStringProperty(desc);
         this.dueDate = dueDate;
         this.complete = complete;
-        this.dueDateFormat = dueDate.toZonedDateTime().toLocalDate();
     }
 
     public ToDoItem(String desc) {
-        this.desc = desc;
-        this.dueDate = getGregNow();
+        this.desc = new SimpleStringProperty(desc);
         this.complete = false;
-        this.dueDateFormat = dueDate.toZonedDateTime().toLocalDate();
     }
 
     public String getDesc() {
-        return desc;
+        return desc.get();
     }
 
     public void setDesc(String desc) {
-        this.desc = desc;
+        this.desc = new SimpleStringProperty(desc);
     }
 
-    public GregorianCalendar getDueDate() {
+    public LocalDate getDueDate() {
         return dueDate;
     }
 
-    public void setDueDate(GregorianCalendar dueDate) {
+    public void setDueDate(LocalDate dueDate) {
         this.dueDate = dueDate;
     }
 

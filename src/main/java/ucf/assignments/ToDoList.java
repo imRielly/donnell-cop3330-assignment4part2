@@ -6,38 +6,34 @@
 package ucf.assignments;
 
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.*;
 
 public class ToDoList {
     String title;
     Collection<ToDoItem> toDoItems;
-
-    public GregorianCalendar getGregNow() {
-        return GregorianCalendar.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()));
-    }
-
+/*
     public Collection<ToDoItem> getBlankList() {
         Collection<ToDoItem> blankList = new ArrayList<>();
-        ToDoItem blankItem = new ToDoItem("NewItem",
-                getGregNow(),
-                false);
+        ToDoItem blankItem = new ToDoItem("");
         blankList.add(blankItem);
         return blankList;
     }
-
+*/
     public ToDoList(){
-        this.title = "NewList";
-        this.toDoItems = getBlankList();
+        this("NewList",new ArrayList<>());
     }
 
     public ToDoList(String title) {
+        this(title, new ArrayList<>());
+    }
+
+    public ToDoList(String title, Collection<ToDoItem> items) {
         this.title = title;
-        this.toDoItems = getBlankList();
+        this.toDoItems = items;
     }
 
     public String getTitle() {
-        return title;
+        return this.title;
     }
 
     public void setTitle(String title) {
@@ -83,14 +79,16 @@ public class ToDoList {
         this.toDoItems = toDoItems;
     }
 
-    public void addItem(String desc, GregorianCalendar dueDate, boolean complete){
+    public void addItem(String desc, LocalDate dueDate, boolean complete){
         //Create a new ToDoItem object
         //Add the new ToDoItem to the ToDoItem Collection;
         ToDoItem item = new ToDoItem(desc, dueDate, complete);
-        toDoItems.add(item);
+        this.toDoItems.add(item);
     }
     public void removeItem(String desc){
         //Collection removeIf item desc equals parameter desc
-        toDoItems.removeIf(i -> desc.equals(i.getDesc()));
+        if(!toDoItems.isEmpty()){
+            toDoItems.removeIf(i -> desc.equals(i.getDesc()));
+        }
     }
 }

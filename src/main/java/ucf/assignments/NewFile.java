@@ -10,7 +10,6 @@ package ucf.assignments;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -42,6 +41,7 @@ public class NewFile {
         Parent parentLoadApp = loadApp.load();
         AppController appController = loadApp.getController();
         appController.appModel.setToDoList(newList);
+        appController.refreshToDoItems();
         Scene scene = new Scene(parentLoadApp);
         Stage window = (Stage) ((Node)actionEvent.getSource()).getScene().getWindow();
         window.setScene(scene);

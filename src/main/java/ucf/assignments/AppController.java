@@ -5,42 +5,41 @@
 
 package ucf.assignments;
 
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-
-import java.io.IOException;
-import java.net.URL;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.GregorianCalendar;
-import java.util.Objects;
-import java.util.ResourceBundle;
-
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+import java.net.URL;
+import java.text.DateFormat;
+import java.time.LocalDate;
+import java.util.Objects;
+import java.util.ResourceBundle;
+
 public class AppController implements Initializable {
-    AppModel appModel = new AppModel();
+
+    static AppModel appModel = new AppModel();
 
     @FXML
     private TableView<ToDoItem> tableView;
     @FXML
     private TableColumn<ToDoItem, String> colDescription;
     @FXML
-    private TableColumn<ToDoItem, GregorianCalendar> colDueDate;
+    private TableColumn<ToDoItem, LocalDate> colDueDate;
     @FXML
     private TableColumn<ToDoItem, Boolean> colCompleted;
-    @FXML
-    private TableColumn<ToDoItem, LocalDate> colDueDateFormatted;
 
     @FXML
     private TextField txtNewDescription;
@@ -56,9 +55,12 @@ public class AppController implements Initializable {
     private CheckBox chkbxShowIncomplete;
 
     @FXML
-    private boolean showCompleted;
+    private boolean showCompleted = true;
     @FXML
-    private boolean showIncomplete;
+    private boolean showIncomplete = true;
+
+    @FXML
+    private TextArea txtError;
 
     @FXML
     public void refreshToDoItems() {
@@ -71,6 +73,7 @@ public class AppController implements Initializable {
         ToDoList filteredItems = new ToDoList();
         ToDoList fullList;
         fullList = appModel.getToDoList();
+
         if (showCompleted && showIncomplete) {
             filteredItems = fullList;
         } else if (showCompleted && !showIncomplete) {
@@ -79,17 +82,29 @@ public class AppController implements Initializable {
             filteredItems.setToDoItems(fullList.getIncompleteToDoItems());
         }
 
+        txtNewDescription.setText("");
+        dtNewDueDate.setValue(null);
+        chkbxNewCompleted.setSelected(false);
+
         tableView.setItems(getItemsToDisplay(filteredItems));
+        tableView.refresh();
+
+        txtError.appendText("Refreshed List\n");
+        txtError.appendText(appModel.getToDoList().getTitle() + "\n");
     }
 
-    public ObservableList<ToDoItem> getItemsToDisplay(ToDoList list){
+    public ObservableList<ToDoItem> getItemsToDisplay(ToDoList list) {
         //Create ObservableList items
         //addAll ToDoItems from list to the ObservableList items
         //return ObservableList items
         ObservableList<ToDoItem> items = FXCollections.observableArrayList();
-        items.addAll(list.getToDoItems());
+        if (list.getToDoItems() != null){
+            items.addAll(list.getToDoItems());
+        }
         return items;
     }
+
+    public DateFormat dateFormat = DateFormat.getDateInstance();
 
     @FXML
     public void btnLoadClicked(ActionEvent actionEvent) throws IOException {
@@ -101,24 +116,29 @@ public class AppController implements Initializable {
 
         Parent parentLoadList = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("LoadFile.fxml")));
         Scene sceneLoadList = new Scene(parentLoadList);
-        Stage window = (Stage) ((Node)actionEvent.getSource()).getScene().getWindow();
+        Stage window = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         window.setScene(sceneLoadList);
         window.show();
-
+        txtError.appendText("btnLoadClicked\n");
     }
 
     @FXML
     public void btnDeleteToDoItemClicked() {
         //toDoList -> removeItem (toDoItem.getDesc)
-        appModel.getToDoList().removeItem(tableView.getSelectionModel().getSelectedItem().desc);
+        appModel.getToDoList().removeItem(tableView.getSelectionModel().getSelectedItem().desc.get());
         refreshToDoItems();
+        txtError.appendText("btnDeleteToDoItemClicked\n");
     }
 
     @FXML
     public void btnNewItemClicked() {
         //toDoList -> addItem(txtDescription, dtDueDate, chkboxCompleted)
         //Refresh to do items
-        appModel.getToDoList().addItem(txtNewDescription.getText(), convertLocalDateToGreg(dtNewDueDate.getValue()), chkbxNewCompleted.isSelected());
+        appModel.getToDoList().addItem(txtNewDescription.getText(), dtNewDueDate.getValue(), chkbxNewCompleted.isSelected());
+        txtError.appendText("btnNewItemClicked\n");
+        txtError.appendText("NewDesc: " + txtNewDescription.getText() + "\n");
+        txtError.appendText("NewDate: " + dtNewDueDate.getValue() + "\n");
+        txtError.appendText("NewComplete: " + chkbxNewCompleted.isSelected());
         refreshToDoItems();
     }
 
@@ -131,9 +151,10 @@ public class AppController implements Initializable {
         //show window
         Parent parentNewList = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("NewFile.fxml")));
         Scene sceneNewList = new Scene(parentNewList);
-        Stage window = (Stage) ((Node)actionEvent.getSource()).getScene().getWindow();
+        Stage window = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         window.setScene(sceneNewList);
         window.show();
+        txtError.appendText("btnCreateNewListClicked\n");
     }
 
     @FXML
@@ -144,6 +165,7 @@ public class AppController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        txtError.appendText("btnSaveListClicked\n");
     }
 
     @FXML
@@ -152,6 +174,8 @@ public class AppController implements Initializable {
         //refreshToDoItems
         showCompleted = chkbxShowCompleted.isSelected();
         refreshToDoItems();
+        txtError.appendText("chkbxShowCompletedClicked\n");
+        txtError.appendText(showCompleted + "\n");
     }
 
     public void chkbxShowIncompleteClicked() {
@@ -159,8 +183,10 @@ public class AppController implements Initializable {
         //refreshToDoItems
         showIncomplete = chkbxShowIncomplete.isSelected();
         refreshToDoItems();
+        txtError.appendText("chkbxShowIncompleteClicked\n");
+        txtError.appendText(showIncomplete + "\n");
     }
-
+/*
     public void colDescriptionUpdate(TableColumn.CellEditEvent<ToDoList, String> toDoListStringCellEditEvent) {
         //String edit = toDoListStringCellEditEvent.getNewValue();
         //ToDoItem selectedItem = tableView.getSelectionModel().getSelectedItem()
@@ -168,12 +194,16 @@ public class AppController implements Initializable {
         // if ToDoItem itemCompare with selectedItem is true
         //      ToDoItem setDescription edit
         String edit = toDoListStringCellEditEvent.getNewValue();
-        edit = edit.substring(0,Math.min(edit.length(),255));
+        edit = edit.substring(0, Math.min(edit.length(), 255));
         ToDoItem selectedItem = tableView.getSelectionModel().getSelectedItem();
         for (ToDoItem i :
                 appModel.getToDoList().getToDoItems()) {
             if (i.itemCompare(selectedItem)) {
                 i.setDesc(edit);
+                txtError.appendText("DescriptionUpdated\n");
+                txtError.appendText("OldValue: " + toDoListStringCellEditEvent.getOldValue() + "\n");
+                txtError.appendText("NewValue: " + edit + "\n");
+                txtError.appendText("CurrentValue: " + i.getDesc() + "\n");
             }
         }
     }
@@ -189,7 +219,11 @@ public class AppController implements Initializable {
         for (ToDoItem i :
                 appModel.getToDoList().getToDoItems()) {
             if (i.itemCompare(selectedItem)) {
-             i.setDueDate(convertLocalDateToGreg(edit));
+                i.setDueDate(edit);
+                txtError.appendText("DescriptionUpdated\n");
+                txtError.appendText("OldValue: " + toDoListLocalDateCellEditEvent.getOldValue() + "\n");
+                txtError.appendText("NewValue: " + edit + "\n");
+                txtError.appendText("CurrentValue: " + i.getDueDate().toString() + "\n");
             }
         }
     }
@@ -206,6 +240,10 @@ public class AppController implements Initializable {
                 appModel.getToDoList().getToDoItems()) {
             if (i.itemCompare(selectedItem)) {
                 i.setComplete(edit);
+                txtError.appendText("DescriptionUpdated\n");
+                txtError.appendText("OldValue: " + toDoListBooleanCellEditEvent.getOldValue() + "\n");
+                txtError.appendText("NewValue: " + edit + "\n");
+                txtError.appendText("CurrentValue: " + (i.getComplete() + "\n"));
             }
         }
     }
@@ -214,9 +252,9 @@ public class AppController implements Initializable {
         if (!(localDate == null)) {
             return GregorianCalendar.from(localDate.atStartOfDay(ZoneId.systemDefault()));
         }
-        return GregorianCalendar.from(LocalDate.of(1900, 01, 01).atStartOfDay(ZoneId.systemDefault()));
+        return GregorianCalendar.from(LocalDate.of(1900, 1, 1).atStartOfDay(ZoneId.systemDefault()));
     }
-
+*/
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         //Initialize the tableview columns
@@ -226,12 +264,23 @@ public class AppController implements Initializable {
         /////colCompleted.setCellValueFactory(new PropertyValueFactory<ToDoItem, boolean>("completed"));
         //</notes?>
         //Refresh to do items
-        colDescription.setCellValueFactory(new PropertyValueFactory<ToDoItem, String>("desc"));
-        colDueDate.setCellValueFactory(new PropertyValueFactory<ToDoItem, GregorianCalendar>("dueDate"));
-        colCompleted.setCellFactory(column -> new CheckBoxTableCell<>());
-        colCompleted.setCellValueFactory(new PropertyValueFactory<ToDoItem, Boolean>("completed"));
-        colDueDateFormatted.setCellValueFactory(new PropertyValueFactory<ToDoItem, LocalDate>("dueDateFormat"));
-        appModel.loadList("DefaultList");
+        colDescription.setCellValueFactory(new PropertyValueFactory<>("desc"));
+        colDueDate.setCellValueFactory(new PropertyValueFactory<>("dueDate"));
+        colCompleted.setCellValueFactory(param -> {
+            ToDoItem item = param.getValue();
+
+            SimpleBooleanProperty booleanProperty = new SimpleBooleanProperty(item.getComplete());
+
+            booleanProperty.addListener((observable, oldValue, newValue) -> item.setComplete(newValue));
+
+            return booleanProperty;
+        });
+        colCompleted.setCellFactory(t -> {
+            CheckBoxTableCell<ToDoItem, Boolean> cell = new CheckBoxTableCell<>();
+            cell.setAlignment(Pos.BASELINE_CENTER);
+            return cell;
+        });
+        tableView.setEditable(true);
         refreshToDoItems();
     }
 }

@@ -47,6 +47,7 @@ public class LoadFile implements Initializable {
         Parent parentLoadApp = loadApp.load();
         AppController appController = loadApp.getController();
         appController.appModel.loadList(fileToLoad);
+        appController.refreshToDoItems();
         Scene scene = new Scene(parentLoadApp);
         Stage window = (Stage) ((Node)mouseEvent.getSource()).getScene().getWindow();
         window.setScene(scene);

@@ -7,6 +7,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -15,7 +16,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="426.0" prefWidth="618.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ucf.assignments.AppController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="426.0" prefWidth="807.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ucf.assignments.AppController">
    <bottom>
       <Label alignment="BOTTOM_RIGHT" prefHeight="28.0" prefWidth="598.0" text="*Help: Double click an item to edit. Press Enter to save the edit." BorderPane.alignment="CENTER">
          <font>
@@ -32,15 +33,20 @@
                      <children>
                         <TableView fx:id="tableView" editable="true" prefHeight="286.0" prefWidth="614.0">
                           <columns>
-                            <TableColumn fx:id="colDescription" onEditCommit="#colDescriptionUpdate" prefWidth="331.0" text="Description" />
-                            <TableColumn fx:id="colDueDate" minWidth="3.0" onEditCommit="#colDueDateUpdate" prefWidth="79.0" text="Due Date" visible="false" />
-                              <TableColumn fx:id="colDueDateFormatted" minWidth="3.0" onEditCommit="#colDueDateUpdate" prefWidth="79.0" text="Due Date" />
-                              <TableColumn fx:id="colCompleted" onEditCommit="#colCompletedUpdate" prefWidth="75.0" text="Completed" />
+                             <TableColumn fx:id="colDescription" prefWidth="331.0" text="Description" />
+                             <TableColumn fx:id="colDueDate" minWidth="3.0" prefWidth="79.0" text="Due Date" />
+                             <TableColumn fx:id="colCompleted" prefWidth="75.0" text="Completed" />
+
+                             <!--<TableColumn fx:id="colDescription" onEditCommit="#colDescriptionUpdate" prefWidth="331.0" text="Description" />
+                             <TableColumn fx:id="colDueDate" minWidth="3.0" onEditCommit="#colDueDateUpdate" prefWidth="79.0" text="Due Date" visible="false" />
+                             <TableColumn fx:id="colDueDateFormatted" minWidth="3.0" onEditCommit="#colDueDateUpdate" prefWidth="79.0" text="Due Date" />
+                             <TableColumn fx:id="colCompleted" onEditCommit="#colCompletedUpdate" prefWidth="75.0" text="Completed" />
+                             -->
                           </columns>
                         </TableView>
                         <VBox alignment="CENTER" prefHeight="286.0" prefWidth="257.0">
                            <children>
-                              <Button fx:id="btnDeleteToDoItem" mnemonicParsing="false" onAction="#btnDeleteToDoItemClicked" prefHeight="20.0" prefWidth="113.0" text="Delete To Do Item">
+                              <Button fx:id="btnDeleteToDoItem" mnemonicParsing="false" onAction="#btnDeleteToDoItemClicked" prefHeight="20.0" prefWidth="113.0" text="Delete Selected To Do Item">
                                  <VBox.margin>
                                     <Insets bottom="10.0" />
                                  </VBox.margin>
@@ -110,4 +116,11 @@
         </items>
       </ToolBar>
    </top>
+   <right>
+      <VBox prefHeight="358.0" prefWidth="196.0" BorderPane.alignment="CENTER">
+         <children>
+            <TextArea fx:id="txtError" prefHeight="357.0" prefWidth="164.0" />
+         </children>
+      </VBox>
+   </right>
 </BorderPane>
