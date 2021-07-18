@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ToDoListTest {
 
-    @Test
+    /*@Test
     void addItem_Test() {
         //New ToDoList testList
         //Run testList addItem("NewItem1", "07/05/2021", false)
@@ -27,7 +27,7 @@ class ToDoListTest {
         ToDoItem newItem = new ToDoItem("NewItem1", LocalDate.of(2021, 7, 5), false);
         assertTrue(testList.getToDoItems().contains(newItem));
 
-    }
+    }*/
 
     @Test
     void removeItem() {
